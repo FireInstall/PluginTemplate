@@ -3,15 +3,17 @@
 plugins {
     `java-library`
     //java
-    id("io.papermc.paperweight.userdev") version "1.5.4"
-    id("xyz.jpenilla.run-paper") version "2.0.1" // Adds runServer and runMojangMappedServer tasks for testing
-    id("xyz.jpenilla.run-waterfall") version "2.0.1" // Adds runWaterfallServer task for testing
+    id("io.papermc.paperweight.userdev") version "1.5.5"
+    id("xyz.jpenilla.run-paper") version "2.1.0" // Adds runServer and runMojangMappedServer tasks for testing
+    id("xyz.jpenilla.run-waterfall") version "2.1.0" // Adds runWaterfallServer task for testing
 }
 
 group = "de.greensurvivors"
 version = "1.0.0-SNAPSHOT"
 description = "A Greensurvivors Plugin "
-//java.sourceCompatibility = JavaVersion.VERSION_17
+// this is the minecraft major version. If you need a subversion like 1.20.1,
+// change it in the dependencies section as this is also used as the api version of the plugin.yml and for waterfall
+val mainMCVersion by extra("1.20")
 
 java {
     // Configure the java toolchain. This allows gradle to auto-provision JDK 17 on systems that only have JDK 8 installed for example.
@@ -28,9 +30,9 @@ repositories {
 }
 
 dependencies {
-    paperweight.paperDevBundle("1.19.3-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("$mainMCVersion.1-R0.1-SNAPSHOT")
     // Waterfall
-    compileOnly("io.github.waterfallmc:waterfall-api:1.19-R0.1-SNAPSHOT")
+    compileOnly("io.github.waterfallmc:waterfall-api:$mainMCVersion-R0.1-SNAPSHOT")
 }
 
 tasks {
@@ -49,10 +51,14 @@ tasks {
 
     processResources {
         filteringCharset = Charsets.UTF_8.name() // We want UTF-8 for everything
+
+        expand("version" to project.version,
+            "description" to project.description,
+            "apiVersion" to mainMCVersion)
     }
 
     runWaterfall {
-        waterfallVersion("1.19")
+        waterfallVersion(mainMCVersion)
     }
 
     /*
