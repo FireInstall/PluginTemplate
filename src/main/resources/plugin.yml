@@ -1,6 +1,6 @@
 main: de.greensurvivors.greenplugin.spigot.GreenPlugin
 name: GreenPlugin
-api-version: ${apiVersion}
+api-version: ${mainMCVersion}
 version: ${version}
 description: ${description}
 author: GreensurvivorsTeam
